@@ -9,34 +9,34 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsRouter(
-      routes: [
+      routes: const [
         DashboardRoute(),
         CreateRoute(),
-        ProfileRoute(),
+        SettingsRoute(),
       ],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
+        final theme = Theme.of(context);
         return Scaffold(
           body: child,
           bottomNavigationBar: Container(
-            decoration: BoxDecoration(color: Colors.white),
+            padding: EdgeInsets.only(top: 10.0),
+            decoration: BoxDecoration(
+                border: Border(
+                    top: BorderSide(color: theme.colorScheme.secondary))),
             child: BottomNavigationBar(
-              onTap: (value) => _onTabOpened(value, tabsRouter),
-              type: BottomNavigationBarType.fixed,
-              currentIndex: tabsRouter.activeIndex,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Главная'
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.create),
-                  label: 'Создать'),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.supervised_user_circle),
-                  label: 'Профиль')
-              ]
-            ),
+                onTap: (value) => _onTabOpened(value, tabsRouter),
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: theme.colorScheme.primary,
+                currentIndex: tabsRouter.activeIndex,
+                items: const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.home), label: 'Главная'),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.create), label: 'Создать'),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.settings), label: 'Настройки')
+                ]),
           ),
         );
       },
