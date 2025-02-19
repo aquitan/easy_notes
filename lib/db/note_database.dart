@@ -58,4 +58,12 @@ class NoteDatabase extends ChangeNotifier {
     });
     await fetchNotes();
   }
+
+  // Clear datababase
+  Future<void> clearDatabase() async {
+    await isar.writeAsync((isar) {
+      isar.noteModels.clear();
+    });
+    await fetchNotes();
+  }
 }
