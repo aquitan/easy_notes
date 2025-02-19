@@ -3,6 +3,7 @@ import 'package:easy_notes/db/note_database.dart';
 import 'package:easy_notes/repository/models/note_model.dart';
 import 'package:easy_notes/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -96,94 +97,200 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // current notes
     List<NoteModel> currentNotes = noteDb.notes;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Stack(children: [
-        CustomScrollView(
-          slivers: [
-            SliverAppBar(
-                pinned: true,
-                snap: true,
-                floating: true,
-                surfaceTintColor: Colors.transparent,
-                title: const Text(
+    return Scaffold(
+        appBar: AppBar(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
                   'Привет, Aquitan',
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
                 ),
-                centerTitle: false,
-                actions: [
-                  GestureDetector(
-                    onTap: () {
-                      AutoRouter.of(context).push(ProfileRoute());
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: theme.colorScheme.secondary,
-                      child: Text("AA"),
-                    ),
+                Text(
+                  'Сегодня 19 Фев.',
+                  style: TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.w400,
+                      color: theme.colorScheme.tertiary),
+                ),
+              ],
+            ),
+            centerTitle: false,
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: GestureDetector(
+                  onTap: () {
+                    AutoRouter.of(context).push(ProfileRoute());
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: theme.colorScheme.secondary,
+                    child: Text("AA"),
                   ),
-                ]),
-            SliverToBoxAdapter(
-                child: Text(
-              'Категории',
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
-            )),
-            SliverList.separated(
-                itemCount: currentNotes.length,
-                separatorBuilder: (_, index) => SizedBox(
-                      height: 10.0,
-                    ),
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      color: theme.colorScheme.secondary,
-                    ),
-                    child: SizedBox(
-                        child: Row(
-                      children: [
-                        Expanded(
-                            child: Column(
-                                spacing: 10.0,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                              Text(
-                                currentNotes[index].title,
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(softWrap: true, currentNotes[index].text),
-                            ])),
-                      ],
-                    )),
-                  );
-                })
+                ),
+              ),
+            ]),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: 32.0,
+                ),
+                Expanded(
+                  child: MasonryGridView.count(
+                      padding: const EdgeInsets.all(16.0),
+                      crossAxisSpacing: 16.0,
+                      mainAxisSpacing: 16.0,
+                      crossAxisCount: 2,
+                      itemCount: currentNotes.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                            color: theme.colorScheme.secondary,
+                          ),
+                          child: SizedBox(
+                              child: Row(
+                            children: [
+                              Expanded(
+                                  child: Column(
+                                      spacing: 10.0,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                    Text(
+                                      currentNotes[index].title,
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Text(
+                                        softWrap: true,
+                                        currentNotes[index].text),
+                                  ])),
+                            ],
+                          )),
+                        );
+                      }),
+                )
+              ],
+            ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0, vertical: 20.0),
+                  child: FilledButton(
+                      onPressed: createNote,
+                      child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 16.0,
+                          children: [
+                            Text(
+                              'Быстрая заметка',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 18.0),
+                            ),
+                            Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            )
+                          ])),
+                )),
           ],
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
-            child: FilledButton(
-                onPressed: createNote,
-                child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 16.0,
-                    children: [
-                      Text(
-                        'Быстрая заметка',
-                        style: TextStyle(color: Colors.white, fontSize: 18.0),
-                      ),
-                      Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      )
-                    ])),
-          ),
         )
-      ]),
     );
   }
 }
+
+// Padding(
+//       padding = const EdgeInsets.symmetric(horizontal: 16.0),
+//       child = Stack(children: [
+//         CustomScrollView(
+//           slivers: [
+//             SliverAppBar(
+//                 pinned: true,
+//                 snap: true,
+//                 floating: true,
+//                 surfaceTintColor: Colors.transparent,
+//                 title: const Text(
+//                   'Привет, Aquitan',
+//                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+//                 ),
+//                 centerTitle: false,
+//                 actions: [
+//                   GestureDetector(
+//                     onTap: () {
+//                       AutoRouter.of(context).push(ProfileRoute());
+//                     },
+//                     child: CircleAvatar(
+//                       backgroundColor: theme.colorScheme.secondary,
+//                       child: Text("AA"),
+//                     ),
+//                   ),
+//                 ]),
+//             SliverToBoxAdapter(
+//                 child: Text(
+//               'Категории',
+//               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+//             )),
+//             SliverList.separated(
+//                 itemCount: currentNotes.length,
+//                 separatorBuilder: (_, index) => SizedBox(
+//                       height: 10.0,
+//                     ),
+//                 itemBuilder: (BuildContext context, int index) {
+//                   return Container(
+//                     padding: EdgeInsets.all(8.0),
+//                     decoration: BoxDecoration(
+//                       borderRadius: BorderRadius.circular(12.0),
+//                       color: theme.colorScheme.secondary,
+//                     ),
+//                     child: SizedBox(
+//                         child: Row(
+//                       children: [
+//                         Expanded(
+//                             child: Column(
+//                                 spacing: 10.0,
+//                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                 children: [
+//                               Text(
+//                                 currentNotes[index].title,
+//                                 style: TextStyle(
+//                                     fontSize: 18.0,
+//                                     fontWeight: FontWeight.w500),
+//                               ),
+//                               Text(softWrap: true, currentNotes[index].text),
+//                             ])),
+//                       ],
+//                     )),
+//                   );
+//                 })
+//           ],
+//         ),
+//         Align(
+//           alignment: Alignment.bottomCenter,
+//           child: Padding(
+//             padding:
+//                 const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
+//             child: FilledButton(
+//                 onPressed: createNote,
+//                 child: const Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     spacing: 16.0,
+//                     children: [
+//                       Text(
+//                         'Быстрая заметка',
+//                         style: TextStyle(color: Colors.white, fontSize: 18.0),
+//                       ),
+//                       Icon(
+//                         Icons.add,
+//                         color: Colors.white,
+//                       )
+//                     ])),
+//           ),
+//         )
+//       ]),
+//     );

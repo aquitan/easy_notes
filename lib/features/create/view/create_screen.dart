@@ -32,6 +32,7 @@ class _CreateScreenState extends State<CreateScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(spacing: 16.0, children: [
           TextField(
+            style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w500),
             controller: titleController,
             decoration: InputDecoration(label: const Text('Введи заголовок')),
           ),
@@ -41,6 +42,7 @@ class _CreateScreenState extends State<CreateScreen> {
             config: const QuillEditorConfig(placeholder: 'Введи текст'),
           )),
           QuillSimpleToolbar(
+
             controller: _controller,
             config: const QuillSimpleToolbarConfig(
               showCodeBlock: false,
@@ -53,6 +55,11 @@ class _CreateScreenState extends State<CreateScreen> {
               showSubscript: false,
               showSuperscript: false,
               showSearchButton: false,
+              showFontSize: false,
+              showHeaderStyle: false,
+              showBackgroundColorButton: false,
+              showIndent: false,
+              showItalicButton: false,
             ),
           ),
         ]),
