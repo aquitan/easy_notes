@@ -21,6 +21,10 @@ class NotesApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         FlutterQuillLocalizations.delegate,
       ],
+      supportedLocales: [
+        Locale('en'),
+        Locale('ru'),
+      ],
       debugShowCheckedModeBanner: false,
       title: 'Easy Notes',
       theme: themeProvider.themeData,

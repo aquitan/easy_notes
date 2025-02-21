@@ -11,20 +11,23 @@ class HomeScreen extends StatelessWidget {
     return AutoTabsRouter(
       routes: const [
         DashboardRoute(),
-        CreateRoute(),
         SettingsRoute(),
       ],
       builder: (context, child) {
         final tabsRouter = AutoTabsRouter.of(context);
         final theme = Theme.of(context);
         return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              AutoRouter.of(context).push(CreateRoute());
+            },
+            child: Icon(Icons.add),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           body: child,
-          bottomNavigationBar: Container(
-            padding: EdgeInsets.only(top: 10.0),
-            decoration: BoxDecoration(
-                border: Border(
-                    top: BorderSide(color: theme.colorScheme.secondary))),
-            child: BottomNavigationBar(
+          bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: theme.cardColor,
                 onTap: (value) => _onTabOpened(value, tabsRouter),
                 type: BottomNavigationBarType.fixed,
                 selectedItemColor: theme.colorScheme.primary,
@@ -32,12 +35,10 @@ class HomeScreen extends StatelessWidget {
                 items: const <BottomNavigationBarItem>[
                   BottomNavigationBarItem(
                       icon: Icon(Icons.home), label: 'Главная'),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.create), label: 'Создать'),
+
                   BottomNavigationBarItem(
                       icon: Icon(Icons.settings), label: 'Настройки')
-                ]),
-          ),
+              ]),
         );
       },
     );

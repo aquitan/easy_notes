@@ -10,6 +10,8 @@ class NoteModel {
   late int id = Uuid().v4().replaceAll("-", "").hashCode;
   late String text;
   late String title;
+  late bool checked = false;
+  late String category = 'general';
 
   DateTime creationDate = DateTime.now();
 }

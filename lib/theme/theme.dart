@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   fontFamily: GoogleFonts.jost().fontFamily,
+  cardColor: Colors.white,
   colorScheme: ColorScheme.light(
     surface: Colors.grey.shade300,
 		primary: Color.fromRGBO(234, 100, 43, 1),
@@ -19,6 +20,7 @@ ThemeData lightTheme = ThemeData(
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   fontFamily: GoogleFonts.jost().fontFamily,
+  cardColor: Colors.black,
   colorScheme: ColorScheme.dark(
 		surface: Colors.grey.shade900,
 		primary: Color.fromRGBO(234, 100, 43, 1),

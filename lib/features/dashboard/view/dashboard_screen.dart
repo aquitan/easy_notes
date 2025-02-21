@@ -2,8 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_notes/db/note_database.dart';
 import 'package:easy_notes/repository/models/note_model.dart';
 import 'package:easy_notes/router/router.dart';
+import 'package:easy_notes/widgets/note_preview.dart';
+import 'package:easy_notes/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -35,50 +37,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   }
 
-  // create note
-  void createNote() {
-    showDialog<dynamic>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-            title: const Text('Создай заметку'),
-            content: SizedBox(
-              height: 150,
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: titleController,
-                    decoration: InputDecoration(
-                      label: Text('Название'),
-                    ),
-                  ),
-                  TextField(
-                    controller: textController,
-                    decoration: InputDecoration(
-                      label: Text('Текст'),
-                    ),
-                  )
-                ]
-              ),
-            ),
-            actions: [
-              TextButton(onPressed: () => Navigator.pop(context), child: Text('Отмена')),
-              TextButton(onPressed: () {
-
-                final note = NoteModel(title: titleController.text, text: textController.text);
-
-                context.read<NoteDatabase>().createNote(note);
-
-                titleController.clear();
-                textController.clear();
-                Navigator.pop(context);
-              }, child: Text('Создать'))
-            ],
-          );
-      }
-    );
-  }
-
   // read notes
   void readNotes() {
     context.read<NoteDatabase>().fetchNotes();
@@ -99,6 +57,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
         appBar: AppBar(
+            surfaceTintColor: Colors.transparent,
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -107,7 +66,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  'Сегодня 19 Фев.',
+                  'Сегодня ${DateFormat.MMMMd('ru_RU').format(DateTime.now())}',
                   style: TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.w400,
@@ -133,164 +92,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
         body: Stack(
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 32.0,
+                  height: 20.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    'Это твои заметки',
+                    style: TextStyle(fontSize: 22.0),
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 Expanded(
-                  child: MasonryGridView.count(
-                      padding: const EdgeInsets.all(16.0),
-                      crossAxisSpacing: 16.0,
-                      mainAxisSpacing: 16.0,
-                      crossAxisCount: 2,
-                      itemCount: currentNotes.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          padding: EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                            color: theme.colorScheme.secondary,
-                          ),
-                          child: SizedBox(
-                              child: Row(
-                            children: [
-                              Expanded(
-                                  child: Column(
-                                      spacing: 10.0,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                    Text(
-                                      currentNotes[index].title,
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    Text(
-                                        softWrap: true,
-                                        currentNotes[index].text),
-                                  ])),
-                            ],
-                          )),
-                        );
-                      }),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, right: 16.0, top: 0, bottom: 50.0),
+                    child: currentNotes.isEmpty
+                        ? EmptyList()
+                        : ListView.separated(
+                            separatorBuilder: (context, index) => SizedBox(
+                                  height: 10.0,
+                                ),
+                            itemCount: currentNotes.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Dismissible(
+                                key: Key(currentNotes[index].id.toString()),
+                                onDismissed: (direction) {
+                                  Provider.of<NoteDatabase>(context,
+                                          listen: false)
+                                      .deleteNote(currentNotes[index].id);
+                                },
+                                background: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.red.shade500,
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  child:
+                                      Icon(Icons.delete, color: Colors.white),
+                                ),
+                                child: NotePreview(note: currentNotes[index]),
+                              );
+                            }),
+                  ),
                 )
               ],
             ),
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0, vertical: 20.0),
-                  child: FilledButton(
-                      onPressed: createNote,
-                      child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 16.0,
-                          children: [
-                            Text(
-                              'Быстрая заметка',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 18.0),
-                            ),
-                            Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            )
-                          ])),
-                )),
           ],
         )
     );
   }
 }
-
-// Padding(
-//       padding = const EdgeInsets.symmetric(horizontal: 16.0),
-//       child = Stack(children: [
-//         CustomScrollView(
-//           slivers: [
-//             SliverAppBar(
-//                 pinned: true,
-//                 snap: true,
-//                 floating: true,
-//                 surfaceTintColor: Colors.transparent,
-//                 title: const Text(
-//                   'Привет, Aquitan',
-//                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
-//                 ),
-//                 centerTitle: false,
-//                 actions: [
-//                   GestureDetector(
-//                     onTap: () {
-//                       AutoRouter.of(context).push(ProfileRoute());
-//                     },
-//                     child: CircleAvatar(
-//                       backgroundColor: theme.colorScheme.secondary,
-//                       child: Text("AA"),
-//                     ),
-//                   ),
-//                 ]),
-//             SliverToBoxAdapter(
-//                 child: Text(
-//               'Категории',
-//               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
-//             )),
-//             SliverList.separated(
-//                 itemCount: currentNotes.length,
-//                 separatorBuilder: (_, index) => SizedBox(
-//                       height: 10.0,
-//                     ),
-//                 itemBuilder: (BuildContext context, int index) {
-//                   return Container(
-//                     padding: EdgeInsets.all(8.0),
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.circular(12.0),
-//                       color: theme.colorScheme.secondary,
-//                     ),
-//                     child: SizedBox(
-//                         child: Row(
-//                       children: [
-//                         Expanded(
-//                             child: Column(
-//                                 spacing: 10.0,
-//                                 crossAxisAlignment: CrossAxisAlignment.start,
-//                                 children: [
-//                               Text(
-//                                 currentNotes[index].title,
-//                                 style: TextStyle(
-//                                     fontSize: 18.0,
-//                                     fontWeight: FontWeight.w500),
-//                               ),
-//                               Text(softWrap: true, currentNotes[index].text),
-//                             ])),
-//                       ],
-//                     )),
-//                   );
-//                 })
-//           ],
-//         ),
-//         Align(
-//           alignment: Alignment.bottomCenter,
-//           child: Padding(
-//             padding:
-//                 const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
-//             child: FilledButton(
-//                 onPressed: createNote,
-//                 child: const Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     spacing: 16.0,
-//                     children: [
-//                       Text(
-//                         'Быстрая заметка',
-//                         style: TextStyle(color: Colors.white, fontSize: 18.0),
-//                       ),
-//                       Icon(
-//                         Icons.add,
-//                         color: Colors.white,
-//                       )
-//                     ])),
-//           ),
-//         )
-//       ]),
-//     );
