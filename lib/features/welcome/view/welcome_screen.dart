@@ -46,7 +46,6 @@ class WelcomeScreen extends StatelessWidget {
 
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setBool('welcome', false);
-    debugPrint('clicked ${pref.getBool('welcome')}');
     AutoRouter.of(context).replaceAll([DashboardRoute()]);
   }
 }

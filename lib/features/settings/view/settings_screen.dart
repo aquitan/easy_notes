@@ -1,17 +1,31 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_notes/db/note_database.dart';
+import 'package:easy_notes/router/router.dart';
 import 'package:easy_notes/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @RoutePage()
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+
+    void clearCache(context) async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      await pref.remove('welcome');
+      if (pref.getString('welcome') == null) {
+        AutoRouter.of(context).replaceAll([WelcomeRoute()]);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Настройки'),
@@ -157,7 +171,9 @@ class SettingsScreen extends StatelessWidget {
                     backgroundColor:
                         WidgetStatePropertyAll(Colors.red.shade500),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    clearCache(context);
+                  },
                   icon: Icon(
                     Icons.cached,
                     color: Colors.white,

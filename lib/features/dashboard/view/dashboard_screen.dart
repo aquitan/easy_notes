@@ -5,6 +5,7 @@ import 'package:easy_notes/router/router.dart';
 import 'package:easy_notes/widgets/note_preview.dart';
 import 'package:easy_notes/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -125,6 +126,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   Provider.of<NoteDatabase>(context,
                                           listen: false)
                                       .deleteNote(currentNotes[index].id);
+                                  Fluttertoast.showToast(
+                                      msg: "Заметка удалена",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM_RIGHT,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
                                 },
                                 background: Container(
                                   decoration: BoxDecoration(

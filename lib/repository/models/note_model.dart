@@ -1,17 +1,21 @@
 import 'package:isar/isar.dart';
-import 'package:uuid/uuid.dart';
 
 part 'note_model.g.dart';
 
-@collection
+@Collection()
 class NoteModel {
-  NoteModel({required this.title, required this.text});
+  NoteModel(
+      {required this.checked,
+      required this.category,
+      required this.title,
+      required this.text});
 
-  late int id = Uuid().v4().replaceAll("-", "").hashCode;
+  Id id = Isar.autoIncrement;
   late String text;
   late String title;
-  late bool checked = false;
-  late String category = 'general';
+  final bool checked;
+  late String category;
+  DateTime? updateDate;
 
   DateTime creationDate = DateTime.now();
 }

@@ -6,6 +6,7 @@ import 'package:easy_notes/features/note/note.dart';
 import 'package:easy_notes/features/profile/profile.dart';
 import 'package:easy_notes/features/settings/settings.dart';
 import 'package:easy_notes/features/welcome/welcome.dart';
+import 'package:easy_notes/repository/models/note_model.dart';
 import 'package:easy_notes/router/guards.dart';
 import 'package:flutter/material.dart';
 

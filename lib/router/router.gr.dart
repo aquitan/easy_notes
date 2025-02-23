@@ -39,7 +39,7 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: NoteScreen(
           key: args.key,
-          id: args.id,
+          note: args.note,
         ),
       );
     },
@@ -111,13 +111,13 @@ class HomeRoute extends PageRouteInfo<void> {
 class NoteRoute extends PageRouteInfo<NoteRouteArgs> {
   NoteRoute({
     Key? key,
-    required int id,
+    required NoteModel note,
     List<PageRouteInfo>? children,
   }) : super(
           NoteRoute.name,
           args: NoteRouteArgs(
             key: key,
-            id: id,
+            note: note,
           ),
           initialChildren: children,
         );
@@ -130,16 +130,16 @@ class NoteRoute extends PageRouteInfo<NoteRouteArgs> {
 class NoteRouteArgs {
   const NoteRouteArgs({
     this.key,
-    required this.id,
+    required this.note,
   });
 
   final Key? key;
 
-  final int id;
+  final NoteModel note;
 
   @override
   String toString() {
-    return 'NoteRouteArgs{key: $key, id: $id}';
+    return 'NoteRouteArgs{key: $key, note: $note}';
   }
 }
 

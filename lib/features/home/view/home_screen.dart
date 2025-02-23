@@ -18,13 +18,17 @@ class HomeScreen extends StatelessWidget {
         final theme = Theme.of(context);
         return Scaffold(
           floatingActionButton: FloatingActionButton(
+            shape: const CircleBorder(),
             onPressed: () {
               AutoRouter.of(context).push(CreateRoute());
             },
-            child: Icon(Icons.add),
+            child: Icon(
+              Icons.create,
+              color: Colors.white,
+            ),
           ),
           floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+              FloatingActionButtonLocation.endFloat,
           body: child,
           bottomNavigationBar: BottomNavigationBar(
               backgroundColor: theme.cardColor,
