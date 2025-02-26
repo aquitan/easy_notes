@@ -5,7 +5,6 @@ import 'package:easy_notes/router/router.dart';
 import 'package:easy_notes/widgets/note_preview.dart';
 import 'package:easy_notes/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -120,30 +119,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                             itemCount: currentNotes.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return Dismissible(
-                                key: Key(currentNotes[index].id.toString()),
-                                onDismissed: (direction) {
-                                  Provider.of<NoteDatabase>(context,
-                                          listen: false)
-                                      .deleteNote(currentNotes[index].id);
-                                  Fluttertoast.showToast(
-                                      msg: "Заметка удалена",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM_RIGHT,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
-                                },
-                                background: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.red.shade500,
-                                      borderRadius: BorderRadius.circular(5.0)),
-                                  child:
-                                      Icon(Icons.delete, color: Colors.white),
-                                ),
-                                child: NotePreview(note: currentNotes[index]),
-                              );
+                              return NotePreview(note: currentNotes[index]);
                             }),
                   ),
                 )

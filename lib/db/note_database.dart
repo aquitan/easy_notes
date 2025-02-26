@@ -9,8 +9,8 @@ class NoteDatabase extends ChangeNotifier {
   // INITIALIZE - DB
   static Future<void> initialize() async {
     final dir = await getApplicationDocumentsDirectory();
-    isar = await Isar.open(
-      [NoteModelSchema],
+    isar = await Isar.openAsync(
+      schemas: [NoteModelSchema],
       directory: dir.path,
       inspector: true,
     );
@@ -23,7 +23,7 @@ class NoteDatabase extends ChangeNotifier {
   // CREATE NOTE
   Future<void> createNote(NoteModel note) async {
     // final newNote = NoteModel() = note;
-    await isar.writeTxn(() => isar.noteModels.put(note));
+    await isar.writeAsync((isar) => isar.noteModels.put(note));
 
     // re-read from db
     fetchNotes();
@@ -31,7 +31,7 @@ class NoteDatabase extends ChangeNotifier {
 
   // READ NOTE
   Future<void> fetchNotes() async {
-    List<NoteModel> fetchedNotes = await isar.noteModels.where().findAll();
+    List<NoteModel> fetchedNotes = await isar.noteModels.where().findAllAsync();
     notes.clear();
     notes.addAll(fetchedNotes);
     notifyListeners();
@@ -39,13 +39,13 @@ class NoteDatabase extends ChangeNotifier {
 
   // UPDATE NOTE
   Future<void> updateNote(int id, NoteModel note) async {
-    NoteModel? foundNote = await isar.noteModels.get(id);
+    NoteModel? foundNote = isar.noteModels.get(id);
 
     if (foundNote != null) {
       foundNote.title = note.title;
       foundNote.text = note.text;
       foundNote.category = note.category;
-      await isar.writeTxn(() => isar.noteModels.put(foundNote));
+      await isar.writeAsync((isar) => isar.noteModels.put(foundNote));
       await fetchNotes();
     }
 
@@ -53,7 +53,7 @@ class NoteDatabase extends ChangeNotifier {
 
   // GET NOTE BY ID
   Future<void> getNoteById(int id) async {
-    NoteModel? note = await isar.noteModels.get(id);
+    NoteModel? note = isar.noteModels.get(id);
     noteById = note;
     notifyListeners();
   }
@@ -61,13 +61,13 @@ class NoteDatabase extends ChangeNotifier {
 
   // DELETE NOTE
   Future<void> deleteNote(int id) async {
-    await isar.writeTxn(() => isar.noteModels.delete(id));
+    await isar.writeAsync((isar) => isar.noteModels.delete(id));
     await fetchNotes();
   }
 
   // Clear datababase
   Future<void> clearDatabase() async {
-    await isar.writeTxn(() => isar.noteModels.clear());
+    await isar.writeAsync((isar) => isar.noteModels.clear());
     await fetchNotes();
   }
 }

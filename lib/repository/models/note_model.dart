@@ -9,8 +9,8 @@ class NoteModel {
       required this.category,
       required this.title,
       required this.text});
-
-  Id id = Isar.autoIncrement;
+  @Id()
+  int id = 0;
   late String text;
   late String title;
   final bool checked;
