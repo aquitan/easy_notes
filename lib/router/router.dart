@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_notes/features/auth/auth.dart';
 import 'package:easy_notes/features/create/create.dart';
 import 'package:easy_notes/features/dashboard/dashboard.dart';
 import 'package:easy_notes/features/home/home.dart';
@@ -23,6 +24,8 @@ class AppRouter extends _$AppRouter {
         ], guards: [
           WelcomeGuard()
         ]),
+        AutoRoute(page: AuthRoute.page),
+        AutoRoute(page: RegisterRoute.page),
         AutoRoute(page: ProfileRoute.page, path: '/profile'),
         AutoRoute(page: CreateRoute.page, path: '/create'),
         AutoRoute(page: NoteRoute.page),

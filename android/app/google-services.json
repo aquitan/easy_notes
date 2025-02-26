@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "405016981693",
+    "project_id": "easy-notes-5cee5",
+    "storage_bucket": "easy-notes-5cee5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405016981693:android:4b777f5cf301f6a57947d4",
+        "android_client_info": {
+          "package_name": "com.aquitan.easy_notes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnHHH5jcrVW2GMfbZ_kjgOM6FnBBSmJsw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
